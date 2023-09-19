@@ -22,10 +22,6 @@ variable "region" {
     nullable = false
 }
 
-locals {
-    azs = ["${var.region}a", "${var.region}b"]
-}
-
 variable "public_subnet_cidrs" {
   type        = list(string)
   description = "Public Subnet CIDR"
