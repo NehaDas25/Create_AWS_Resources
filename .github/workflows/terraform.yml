@@ -50,16 +50,23 @@ jobs:
         echo "** Running Terraform Plan**"
         PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
         PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
-        terraform plan -var="region=$REGION" -var="basename=$BASENAME" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
+        AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
+        terraform plan -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
     - name : Terraform apply
       run: |
         echo 'pwd'
         echo "** Running Terraform Apply**"
-        terraform apply -var="region=$REGION" -var="basename=$BASENAME" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+        PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
+        PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
+        AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
+        terraform apply -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
       working-directory: ${{ env.tfcode_path }}
   
     # - name: Terraform Destroy
     #   run: |
     #     echo "** Running Terraform Destroy**"
-    #     terraform destroy -var="region=$REGION" -var="basename=$BASENAME" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+    #     PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
+    #     PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
+    #     AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
+    #     terraform destroy -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
     #   working-directory: ${{ env.tfcode_path }}

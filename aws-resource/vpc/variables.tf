@@ -22,6 +22,12 @@ variable "region" {
     nullable = false
 }
 
+variable "azs" {
+  type        = list(string)
+  description = "Availability zones"
+  nullable = false
+}
+
 variable "public_subnet_cidrs" {
   type        = list(string)
   description = "Public Subnet CIDR"

@@ -24,9 +24,9 @@ resource "aws_internet_gateway" "gw" {
 #                    Public Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "public_subnets" {
-  count             = length(locals.azs)
+  count             = length(var.azs)
   vpc_id            = aws_vpc.main.id
-  availability_zone = element(locals.azs, count.index)
+  availability_zone = element(var.azs, count.index)
   cidr_block        = element(var.public_subnet_cidrs, count.index)
 
   tags = {
@@ -38,9 +38,9 @@ resource "aws_subnet" "public_subnets" {
 #                    Private Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "private_subnets" {
-  count             = length(locals.azs)
+  count             = length(var.azs)
   vpc_id            = aws_vpc.main.id
-  availability_zone = element(locals.azs, count.index)
+  availability_zone = element(var.azs, count.index)
   cidr_block        = element(var.private_subnet_cidrs, count.index)
 
   tags = {
