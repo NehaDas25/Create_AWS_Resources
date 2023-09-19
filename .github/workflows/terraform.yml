@@ -2,14 +2,14 @@ name: Neha Creating AWS Resources Using Terraform
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 env:
   tfcode_path: aws-resource/vpc
-  AWS_ACCESS_KEY_ID : ${{secrets.AWS_ACCESS_KEY}}
-  AWS_SECRET_ACCESS_KEY_ID : ${{secrets.AWS_SECRET_KEY}}
+  AWS_ACCESS_KEY_ID : ${{ secrets.aws_access_key }}
+  AWS_SECRET_ACCESS_KEY_ID : ${{ secrets.aws_secret_key }}
   REGION: "us-east-2"
   BASENAME: "NEHA"
   VPC_CIDR_BLOCK: "10.0.0.0/16"
