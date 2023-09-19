@@ -52,6 +52,8 @@ jobs:
         PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
         AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
         terraform plan -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
+      working-directory: ${{ env.tfcode_path }}
+      
     - name : Terraform apply
       run: |
         echo 'pwd'
