@@ -1,5 +1,5 @@
 ###########################################################
-                     VPC - CIDR Block
+#                     VPC - CIDR Block
 ###########################################################
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
 }
 
 ###########################################################
-                 VPC - Internet Gateway
+#                 VPC - Internet Gateway
 ###########################################################
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
@@ -21,7 +21,7 @@ resource "aws_internet_gateway" "gw" {
 }
 
 ###########################################################
-                    Public Subnets CIDRs
+#                    Public Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "public_subnets" {
   count             = length(locals.azs)
@@ -35,7 +35,7 @@ resource "aws_subnet" "public_subnets" {
 }
 
 ###########################################################
-                    Private Subnets CIDRs
+#                    Private Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "private_subnets" {
   count             = length(locals.azs)
@@ -49,7 +49,7 @@ resource "aws_subnet" "private_subnets" {
 }
 
 ###########################################################
-               Elastic IP for NAT GW
+#               Elastic IP for NAT GW
 ###########################################################
 resource "aws_eip" "EIP_Nat_GW" {
   count = length(aws_subnet.private_subnets)
@@ -60,7 +60,7 @@ resource "aws_eip" "EIP_Nat_GW" {
 }
 
 ###########################################################
-                         Nat Gateway
+#                         Nat Gateway
 ###########################################################
 resource "aws_nat_gateway" "Nat_Gateways" {
   count         = length(aws_subnet.private_subnets)
@@ -72,7 +72,7 @@ resource "aws_nat_gateway" "Nat_Gateways" {
 }
 
 ###########################################################
-                    Public Subnet Route Table
+#                    Public Subnet Route Table
 ###########################################################
 resource "aws_route_table" "public_subnets_rt" {
   vpc_id = aws_vpc.main.id
@@ -94,7 +94,7 @@ resource "aws_route_table_association" "public_subnet_asso" {
 }
 
 ###########################################################
-                    Private Subnet Route Table
+#                    Private Subnet Route Table
 ###########################################################
 resource "aws_route_table" "private_subnets" {
   count  = length(aws_nat_gateway.Nat_Gateways)
