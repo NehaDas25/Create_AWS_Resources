@@ -7,11 +7,6 @@ variable "basename"{
   nullable = false
 }
 
-variable "vpc_name" {
-  type    = string
-  nullable = false
-}
-
 variable "vpc_cidr_block" {
   type    = string
   nullable = false
