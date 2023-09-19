@@ -2,5 +2,5 @@
 #                    Availability Zones
 ###########################################################
 locals{
-    azs = ["${var.region}a", "${var.region}b"]
+    azs = ["${var.aws_region}a", "${var.aws_region}b"]
 }
