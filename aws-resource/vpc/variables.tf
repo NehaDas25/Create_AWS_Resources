@@ -2,8 +2,7 @@ provider "aws"{
   region = var.region
 } 
 
-variable "basename"
-{
+variable "basename"{
   type = string
   nullable = false
 }
