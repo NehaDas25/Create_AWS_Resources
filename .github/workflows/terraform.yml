@@ -34,14 +34,13 @@ jobs:
         export $AWS_ACCESS_KEY_ID 
         export $AWS_SECRET_ACCESS_KEY_ID
       working-directory: ${{ env.tfcode_path }}
-      
+
     # Call rest of the Terraform commands
     - name: Terraform init and validate
       run: |
         echo `pwd`
         echo "** Running Terraform Init**"
-        terraform init -backend-config="bucket=neha-das-statefiles" -backend-config="key=network_infra/{${{ env.tfcode_path }}}/terraform.tfstate"
-          
+        terraform init
         echo "** Running Terraform Validate**"
         terraform validate
       working-directory: ${{ env.tfcode_path }}
