@@ -1,7 +1,3 @@
-provider "aws"{
-  region = "${var.region}"
-} 
-
 variable "basename"{
   type = string
   nullable = false
