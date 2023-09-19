@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
 
   tags = {
-    Name = "${var.vpc_name}-VPC"
+    Name = "${var.basename}-VPC"
   }
 }
 
@@ -16,7 +16,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${var.vpc_name} IG"
+    Name = "${var.basename}-IG"
   }
 }
 
@@ -24,13 +24,13 @@ resource "aws_internet_gateway" "gw" {
                     Public Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "public_subnets" {
-  count             = length(var.azs)
+  count             = length(locals.azs)
   vpc_id            = aws_vpc.main.id
-  availability_zone = element(var.azs, count.index)
+  availability_zone = element(locals.azs, count.index)
   cidr_block        = element(var.public_subnet_cidrs, count.index)
 
   tags = {
-    Name = "Public Subnet ${count.index + 1}"
+    Name = "${var.basename}-Public-Subnet-${count.index + 1}"
   }
 }
 
@@ -38,13 +38,13 @@ resource "aws_subnet" "public_subnets" {
                     Private Subnets CIDRs
 ###########################################################
 resource "aws_subnet" "private_subnets" {
-  count             = length(var.azs)
+  count             = length(locals.azs)
   vpc_id            = aws_vpc.main.id
-  availability_zone = element(var.azs, count.index)
+  availability_zone = element(locals.azs, count.index)
   cidr_block        = element(var.private_subnet_cidrs, count.index)
 
   tags = {
-    Name = "Private Subnet ${count.index + 1}"
+    Name = "${var.basename}-Private-Subnet-${count.index + 1}"
   }
 }
 
@@ -54,6 +54,9 @@ resource "aws_subnet" "private_subnets" {
 resource "aws_eip" "EIP_Nat_GW" {
   count = length(aws_subnet.private_subnets)
   vpc   = true
+  tags = {
+    Name = "${var.basename}-EIP-${count.index + 1}"
+  }
 }
 
 ###########################################################
@@ -63,6 +66,9 @@ resource "aws_nat_gateway" "Nat_Gateways" {
   count         = length(aws_subnet.private_subnets)
   allocation_id = element(aws_eip.EIP_Nat_GW, count.index).id
   subnet_id     = element(aws_subnet.private_subnets, count.index).id
+  tags = {
+    Name = "${var.basename}-NAT-${count.index + 1}"
+  }
 }
 
 ###########################################################
@@ -77,7 +83,7 @@ resource "aws_route_table" "public_subnets_rt" {
   }
 
   tags = {
-    Name = "Public Subnet Route Table"
+    Name = "${var.basename}-Public-Subnet-RT"
   }
 }
 
@@ -100,7 +106,7 @@ resource "aws_route_table" "private_subnets" {
   }
 
   tags = {
-    Name = "Private Subnet Route Table"
+    Name = "{var.basename}-Private-Subnet-RT"
   }
 }
 
