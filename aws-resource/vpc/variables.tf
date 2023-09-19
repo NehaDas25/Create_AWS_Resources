@@ -1,3 +1,7 @@
+provider "aws"{
+  region = "${var.aws_region}"
+} 
+
 variable "basename"{
   type = string
   nullable = false
@@ -8,7 +12,7 @@ variable "vpc_cidr_block" {
   nullable = false
 }
 
-variable "region" {
+variable "aws_region" {
     type    = string
     nullable = false
 }

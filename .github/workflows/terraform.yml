@@ -8,8 +8,8 @@ on:
 
 env:
   tfcode_path: aws-resource/vpc
-  AWS_ACCESS_KEY_ID : ${{ secrets.aws_access_key }}
-  AWS_SECRET_ACCESS_KEY_ID : ${{ secrets.aws_secret_key }}
+  AWS_ACCESS_KEY : ${{ secrets.aws_access_key }}
+  AWS_SECRET_ACCESS_KEY : ${{ secrets.aws_secret_key }}
   REGION: "us-east-2"
   BASENAME: "NEHA"
   VPC_CIDR_BLOCK: "10.0.0.0/16"
@@ -31,8 +31,8 @@ jobs:
     # Add the AWS Creds as ENV variable in TF Cloud workspace, since the tf run happens in TF Cloud environment
     - name : Before Script Run
       run: |
-        export $AWS_ACCESS_KEY_ID 
-        export $AWS_SECRET_ACCESS_KEY_ID
+        export $AWS_ACCESS_KEY 
+        export $AWS_SECRET_ACCESS_KEY
       working-directory: ${{ env.tfcode_path }}
 
     # Call rest of the Terraform commands
@@ -51,7 +51,7 @@ jobs:
         PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
         PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
         AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
-        terraform plan -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
+        terraform plan -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
       working-directory: ${{ env.tfcode_path }}
 
     - name : Terraform apply
@@ -61,7 +61,7 @@ jobs:
         PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
         PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
         AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
-        terraform apply -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+        terraform apply -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
       working-directory: ${{ env.tfcode_path }}
   
     # - name: Terraform Destroy
@@ -70,5 +70,5 @@ jobs:
     #     PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
     #     PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
     #     AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
-    #     terraform destroy -var="region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+    #     terraform destroy -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
     #   working-directory: ${{ env.tfcode_path }}
