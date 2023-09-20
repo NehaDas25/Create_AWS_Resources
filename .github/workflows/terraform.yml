@@ -40,7 +40,7 @@ jobs:
       run: |
         echo `pwd`
         echo "** Running Terraform Init**"
-        terraform init
+        terraform init -backend-config="bucket=neha-das-statefiles" -backend-config="key=$BASENAME/network-infra/terraform.tfstate"
         echo "** Running Terraform Validate**"
         terraform validate
       working-directory: ${{ env.tfcode_path }}
@@ -54,21 +54,21 @@ jobs:
         terraform plan -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR"
       working-directory: ${{ env.tfcode_path }}
 
-    # - name : Terraform apply
-    #   run: |
-    #     echo 'pwd'
-    #     echo "** Running Terraform Apply**"
-    #     PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
-    #     PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
-    #     AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
-    #     terraform apply -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
-    #   working-directory: ${{ env.tfcode_path }}
-  
-    - name: Terraform Destroy
+    - name : Terraform apply
       run: |
-        echo "** Running Terraform Destroy**"
+        echo 'pwd'
+        echo "** Running Terraform Apply**"
         PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
         PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
         AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
-        terraform destroy -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+        terraform apply -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
       working-directory: ${{ env.tfcode_path }}
+  
+    # - name: Terraform Destroy
+    #   run: |
+    #     echo "** Running Terraform Destroy**"
+    #     PRIVATE_SUBNETS_CIDR=['"'$NETWORK_PRIVATE_SUBNETS_CIDR1'","'$NETWORK_PRIVATE_SUBNETS_CIDR2'"']
+    #     PUBLIC_SUBNETS_CIDR=['"'$NETWORK_PUBLIC_SUBNETS_CIDR1'","'$NETWORK_PUBLIC_SUBNETS_CIDR2'"']
+    #     AVAILABILITY_ZONES=['"'$REGION'a","'$REGION'b"']
+    #     terraform destroy -var="aws_region=$REGION" -var="basename=$BASENAME" -var="azs=$AVAILABILITY_ZONES" -var="vpc_cidr_block=$VPC_CIDR_BLOCK" -var="private_subnet_cidrs=$PRIVATE_SUBNETS_CIDR" -var="public_subnet_cidrs=$PUBLIC_SUBNETS_CIDR" -auto-approve
+    #   working-directory: ${{ env.tfcode_path }}
